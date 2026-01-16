@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sizer-AI | Image Resizer</title>
+    <style>
+        body { font-family: sans-serif; background: #fdf2f8; text-align: center; padding: 50px; }
+        .card { background: white; padding: 30px; border-radius: 20px; display: inline-block; box-shadow: 0 10px 15px rgba(0,0,0,0.05); }
+        .input-group { margin: 15px 0; }
+        input[type="number"] { width: 80px; padding: 8px; border-radius: 5px; border: 1px solid #ddd; }
+        .btn { background: #db2777; color: white; padding: 12px 25px; border: none; border-radius: 8px; cursor: pointer; }
+        .download-btn { display: block; margin-top: 20px; color: #db2777; font-weight: bold; text-decoration: none; border: 2px solid #db2777; padding: 10px; border-radius: 8px; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>📏 Sizer-AI</h1>
+        <form action="/resize" method="post" enctype="multipart/form-data">
+            <input type="file" name="file" required>
+            <div class="input-group">
+                <input type="number" name="width" placeholder="Width" required> x 
+                <input type="number" name="height" placeholder="Height" required>
+            </div>
+            <button type="submit" class="btn">Resize & Download</button>
+        </form>
+
+        {% if download_link %}
+            <p>{{ message }}</p>
+            <a href="/download/{{ download_link }}" class="download-btn">⬇️ Download Resized Image</a>
+        {% endif %}
+    </div>
+</body>
+</html>
