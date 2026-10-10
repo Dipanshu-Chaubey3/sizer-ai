@@ -1,13 +1,19 @@
-from PIL import Image
-import os
+from pathlib import Path
+from PIL import Image, UnidentifiedImageError
 
 def resize_image(input_path, output_path, width, height):
+    if not isinstance(width, int) or not isinstance(height, int) or width < 1 or height < 1:
+        return False
     try:
-        with Image.open(input_path) as img:
-            # Use LANCZOS for high-quality downsampling
-            resized_img = img.resize((width, height), Image.Resampling.LANCZOS)
-            resized_img.save(output_path)
+        output = Path(output_path)
+        output.parent.mkdir(parents=True, exist_ok=True)
+        with Image.open(input_path) as image:
+            resized = image.convert("RGB") if image.mode not in ("RGB", "RGBA") else image.copy()
+            resized = resized.resize((width, height), Image.Resampling.LANCZOS)
+            fmt = output.suffix.lower()
+            if fmt in (".jpg", ".jpeg") and resized.mode == "RGBA":
+                resized = resized.convert("RGB")
+            resized.save(output)
         return True
-    except Exception as e:
-        print(f"Error: {e}")
+    except (OSError, UnidentifiedImageError, ValueError):
         return False
